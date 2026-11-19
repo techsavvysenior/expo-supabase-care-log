@@ -1,0 +1,15 @@
+# UC-06: a caregiver signs in and sees only their assigned house.
+appId: com.example.carelog
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: email
+- inputText: ${MAESTRO_EMAIL}
+- tapOn:
+    id: password
+- inputText: ${MAESTRO_PASSWORD}
+- tapOn:
+    id: submit
+- assertVisible: Residents
+- assertNotVisible: Admin

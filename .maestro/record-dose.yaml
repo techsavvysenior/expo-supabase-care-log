@@ -1,0 +1,11 @@
+# UC-10: record a dose that is due. Needs a staging order scheduled within
+# the hour at the caregiver's site.
+appId: com.example.carelog
+---
+- launchApp
+- tapOn: Medications
+- assertVisible: Medication pass.*
+- tapOn:
+    id: record-dose
+    index: 0
+- assertVisible: given

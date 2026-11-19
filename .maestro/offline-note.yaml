@@ -1,0 +1,21 @@
+# UC-07: a note written with no connection is kept on the phone and sent once
+# when the connection returns. Run on a device or emulator that allows
+# airplane mode.
+appId: com.example.carelog
+---
+- launchApp
+- tapOn:
+    index: 0
+    text: Room.*
+- setAirplaneMode: enabled
+- tapOn:
+    id: note-body
+- inputText: Maestro offline check, please ignore.
+- tapOn:
+    id: save-note
+- assertVisible: .*waiting for a connection.*
+- setAirplaneMode: disabled
+- extendedWaitUntil:
+    notVisible: .*waiting for a connection.*
+    timeout: 30000
+- assertVisible: Maestro offline check, please ignore.
