@@ -1,0 +1,18 @@
+# Local development settings for `supabase start`. Hosted projects take these
+# from the dashboard.
+project_id = "expo-supabase-care-log"
+
+[api]
+schemas = ["public"]
+
+[auth]
+site_url = "carelog://"
+additional_redirect_urls = ["carelog://*"]
+enable_signup = true
+
+[auth.email]
+enable_confirmations = true
+
+# The dispatcher authenticates with x-cron-secret, not a user JWT.
+[functions.dispatch-notifications]
+verify_jwt = false
