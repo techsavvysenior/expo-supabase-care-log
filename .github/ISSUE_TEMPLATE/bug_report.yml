@@ -1,0 +1,36 @@
+name: Bug report
+description: Something doesn't work as described in docs/use-cases.md
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "Do not paste resident names, notes, screenshots of records or any other health information into this issue."
+  - type: input
+    id: use_case
+    attributes:
+      label: Use case
+      description: The UC id from docs/use-cases.md, if one applies
+      placeholder: UC-10
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - "high: wrong record, data shown to the wrong person, or data loss"
+        - "medium: a workflow is blocked"
+        - "low: cosmetic or has a workaround"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Role, platform (iOS or Android), online or offline
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
