@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  app:
+    name: App, unit tests and bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Type check
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests with coverage gate
+        run: npm run test:coverage -- --ci
+      - name: Bundle for iOS and Android
+        run: npx expo export --platform ios --platform android --output-dir dist
+        env:
+          EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          EXPO_PUBLIC_SUPABASE_KEY: ci-placeholder
+
+  database:
+    name: Database tests (real Postgres, in process)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run test:db
+
+  functions:
+    name: Edge Functions (Deno type check and tests)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type check
+        run: deno check --config supabase/functions/deno.json supabase/functions/*/index.ts
+      - name: Handler tests
+        run: deno test --config supabase/functions/deno.json --allow-env supabase/functions/tests/
+
+  traceability:
+    name: Every use case has a test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - run: node scripts/traceability.mjs
+      - name: Add the matrix to the run summary
+        if: always()
+        run: sed -n '1,/^## Tests by use case/p' docs/traceability.md >> "$GITHUB_STEP_SUMMARY"
