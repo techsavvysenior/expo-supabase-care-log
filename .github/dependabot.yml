@@ -1,0 +1,8 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+  # App dependencies follow the Expo SDK; upgrade them with `npx expo install --fix`
+  # when moving SDKs rather than one Dependabot PR at a time.

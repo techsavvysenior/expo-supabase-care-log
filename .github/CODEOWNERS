@@ -1,0 +1,6 @@
+# Database and Edge Functions change who can see health records. They need
+# a second review from the lead.
+*                       @techsavvysenior
+/supabase/migrations/   @techsavvysenior
+/supabase/functions/    @techsavvysenior
+/docs/security.md       @techsavvysenior
